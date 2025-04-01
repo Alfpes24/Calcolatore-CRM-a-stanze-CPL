@@ -5,14 +5,30 @@ document.getElementById("calculate-btn").addEventListener("click", function () {
     const additionalLocations = parseInt(document.getElementById("additional-locations").value) || 0;
     const noa = parseInt(document.getElementById("noa").value) || 0;
 
-    const setupFeeTable = [99, 129, 129, 159, 159, 199, 199, 199, 299, 499];
-    const pricePerRoomTable = [195, 105, 100, 95, 80, 60, 60, 60, 55, 55];
+    const pricingTable = [
+        { rooms: 1, setup: 99, price: 270 },
+        { rooms: 2, setup: 129, price: 180 },
+        { rooms: 3, setup: 129, price: 160 },
+        { rooms: 4, setup: 159, price: 130 },
+        { rooms: 5, setup: 159, price: 110 },
+        { rooms: 6, setup: 199, price: 100 },
+        { rooms: 7, setup: 199, price: 100 },
+        { rooms: 8, setup: 199, price: 100 },
+        { rooms: 9, setup: 299, price: 95 },
+        { rooms: 10, setup: 499, price: 90 }
+    ];
 
-    const setupFee = rooms >= 10 ? setupFeeTable[9] : setupFeeTable[rooms - 1];
-    const monthlyPricePerRoom = rooms >= 10 ? pricePerRoomTable[9] : pricePerRoomTable[rooms - 1];
+    let setupFee = 499;
+    let monthlyPricePerRoom = 90;
+
+    if (rooms >= 1 && rooms <= 10) {
+        const pricing = pricingTable.find(p => p.rooms === rooms);
+        setupFee = pricing.setup;
+        monthlyPricePerRoom = pricing.price;
+    }
+
     const monthlyPrice = monthlyPricePerRoom * rooms;
 
-    // Sales commission calculation based on provided formula
     const commissionBase = monthlyPrice;
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
     const commissionLocations = additionalLocations * 99;
